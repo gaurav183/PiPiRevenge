@@ -2,13 +2,13 @@ import random
 from Tkinter import *
 from eventBasedAnimationClass import EventBasedAnimationClass
 
-class SameGame(EventBasedAnimationClass):
+class PiPiRevenge(EventBasedAnimationClass):
     def __init__(self,rows,cols,numColors):
         margin = 100
         cellSize = 30
         self.canvasWidth = 2*margin + cols*cellSize
         self.canvasHeight = 2*margin + rows*cellSize
-        super(SameGame,self).__init__(self.canvasWidth,self.canvasHeight)
+        super(PiPiRevenge,self).__init__(self.canvasWidth,self.canvasHeight)
         self.margin = margin
         self.cellSize = cellSize
         self.rows = rows
@@ -296,6 +296,6 @@ class SameGame(EventBasedAnimationClass):
         self.loadBoard()
         self.isGameOver = False
         
-playSameGame = SameGame(rows=10, cols=15, numColors=3)
+playPiPiRevenge = PiPiRevenge(rows=10, cols=15, numColors=3)
 
-playSameGame.run()
+playPiPiRevenge.run()
