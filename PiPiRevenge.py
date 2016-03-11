@@ -3,6 +3,15 @@ from eventBasedAnimationClass import EventBasedAnimationClass
 import random
 import math
 
+def distance(self,x0,y0,x1,y1):
+  return ((x0-x1)**2+(y0-y1)**2)**0.5
+    
+def almostEqual(a,b,epsilon = 10*10**-6):
+  return abs(a - b) < epsilon
+   
+def inCircle(x,y,cx,cy,r):
+  return UnderTheSea.almostEqual(float(((x-cx)**2+(y-cy)**2)**0.5),
+          float(r))
 
 class PiPiRevenge(EventBasedAnimationClass):
     def __init__(self):
@@ -12,14 +21,12 @@ class PiPiRevenge(EventBasedAnimationClass):
         self.isMainScreen = True 
         self.isSplashScreen = False 
         self.isHelpScreen = False
-        self.timerDelay = 75
+        self.timerDelay = 20
         self.startButtonX0,self.startButtonY0 = self.width/2-80,self.height/2.5
         self.startButtonX1 = self.width/2+80
         self.startButtonY1 = self.startButtonY0 + 70
         self.initPositions()
-
-
-    # all objects are treated as circles for collision detection
+    
     def initPositions(self):
         self.redPlanetX = self.width/4
         self.redPlanetY = 7*self.height/8
@@ -37,6 +44,9 @@ class PiPiRevenge(EventBasedAnimationClass):
         self.asteroid3X = 3*self.width/4
         self.asteroid3Y = self.height/12
         self.asteroidR = 30
+        self.randSpeed1 = random.randint(5,30)
+        self.randSpeed2 = random.randint(5,30)
+        self.randSpeed3 = random.randint(5,30)
         
     def drawSplashScreen(self):
         self.background = PhotoImage(file = "images/splashScreen.gif")
@@ -59,16 +69,19 @@ class PiPiRevenge(EventBasedAnimationClass):
         self.canvas.create_image((3*self.width/4), (7*self.height/8), image = self.bluePlanet)
         self.drawAsteroids()
     
-    def onTimerFired(self):
-        self.asteroid1Y += random.randint(0,65)
-        self.asteroid2Y += random.randint(0,65)
-        self.asteroid3Y += random.randint(0,65)
+    def onTimerFired(self): 
+        self.asteroid1Y += self.randSpeed1
+        self.asteroid2Y += self.randSpeed2
+        self.asteroid3Y += self.randSpeed3
         if (self.asteroid1Y >= (7*self.height/8)):
           self.asteroid1Y = self.height/12
+          self.randSpeed1 = random.randint(5,30)
         if (self.asteroid2Y >= (7*self.height/8)):
           self.asteroid2Y = self.height/12
+          self.randSpeed2 = random.randint(5,30)
         if (self.asteroid3Y >= (7*self.height/8)):
           self.asteroid3Y = self.height/12
+          self.randSpeed3 = random.randint(5,30)
 
     def drawAsteroids(self):
         self.asteroid = PhotoImage(file = "images/asteroid.gif")
