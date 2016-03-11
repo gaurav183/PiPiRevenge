@@ -1,3 +1,4 @@
 background: https://f1.bcbits.com/img/a3011197963_10.jpg
-redplanet: http://previews.123rf.com/images/wayoutwest/wayoutwest0711/wayoutwest071100037/2074586-Molten-red-planet--Stock-Photo.jpg
-gold planet: http://www.dragonshades.com/wp-content/uploads/2014/02/sat-9-11-13-321-CROP-rising-sun-resize-15185.jpg
+red planet: http://previews.123rf.com/images/wayoutwest/wayoutwest0711/wayoutwest071100037/2074586-Molten-red-planet--Stock-Photo.jpg
+gold planet: https://upload.wikimedia.org/wikipedia/commons/8/85/Venus_globe.jpg
+blue planet: http://solarviews.com/raw/earth/bluemarblewest.jpg
