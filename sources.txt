@@ -1,1 +1,3 @@
-https://f1.bcbits.com/img/a3011197963_10.jpg
+background: https://f1.bcbits.com/img/a3011197963_10.jpg
+redplanet: http://previews.123rf.com/images/wayoutwest/wayoutwest0711/wayoutwest071100037/2074586-Molten-red-planet--Stock-Photo.jpg
+gold planet: http://www.dragonshades.com/wp-content/uploads/2014/02/sat-9-11-13-321-CROP-rising-sun-resize-15185.jpg
