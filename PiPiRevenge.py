@@ -3,6 +3,10 @@ from eventBasedAnimationClass import EventBasedAnimationClass
 import random
 import math
 
+# add a score display instead of printing
+# add sound
+# add capacitive touch HAT :D
+
 def distance(self,x0,y0,x1,y1):
   return ((x0-x1)**2+(y0-y1)**2)**0.5
     
@@ -10,7 +14,7 @@ def almostEqual(a,b,epsilon = 10*10**-6):
   return abs(a - b) < epsilon
    
 def inCircle(x,y,cx,cy,r):
-  return UnderTheSea.almostEqual(float(((x-cx)**2+(y-cy)**2)**0.5),
+  return almostEqual(float(((x-cx)**2+(y-cy)**2)**0.5),
           float(r))
 
 class PiPiRevenge(EventBasedAnimationClass):
@@ -31,12 +35,12 @@ class PiPiRevenge(EventBasedAnimationClass):
         self.redPlanetX = self.width/4
         self.redPlanetY = 7*self.height/8
         self.redPlanetR = 50
-        self.bluePlanetX = self.width/2
+        self.goldPlanetX = self.width/2
+        self.goldPlanetY = 7*self.height/8
+        self.goldPlanetR = 50
+        self.bluePlanetX = 3*self.width/4
         self.bluePlanetY = 7*self.height/8
         self.bluePlanetR = 50
-        self.goldPlanetX = 3*self.width/4
-        self.goldPlanetY = 7*self.height/4
-        self.goldPlanetR = 50
         self.asteroid1X = self.width/4
         self.asteroid1Y = self.height/12
         self.asteroid2X = self.width/2
@@ -50,6 +54,10 @@ class PiPiRevenge(EventBasedAnimationClass):
         self.redPlanet = PhotoImage(file = "images/redplanet.gif")
         self.goldPlanet = PhotoImage(file = "images/goldplanet.gif")
         self.bluePlanet = PhotoImage(file = "images/blueplanet.gif")
+        self.redOn = False
+        self.goldOn = False
+        self.blueOn = False
+        self.score = 0
          
     def drawSplashScreen(self):
         self.background = PhotoImage(file = "images/splashScreen.gif")
@@ -65,29 +73,73 @@ class PiPiRevenge(EventBasedAnimationClass):
         self.background = PhotoImage(file = "images/splashScreen.gif")
         self.canvas.create_image(self.width/2, self.height/2, image = self.background)
         self.canvas.create_image((self.width/4), (7*self.height/8), image = self.redPlanet)
-        self.canvas.create_image((2*self.width/4), (7*self.height/8), image = self.goldPlanet)
+        self.canvas.create_image((self.width/2), (7*self.height/8), image = self.goldPlanet)
         self.canvas.create_image((3*self.width/4), (7*self.height/8), image = self.bluePlanet)
         self.drawAsteroids()
     
-    def onTimerFired(self): 
-        self.redPlanet = PhotoImage(file = "images/redplanet.gif")
-        self.goldPlanet = PhotoImage(file = "images/goldplanet.gif")
-        self.bluePlanet = PhotoImage(file = "images/blueplanet.gif")
+    def onTimerFired(self):
+        print(self.score)
+
+        self.redPlanetCollision()
+        self.goldPlanetCollision()
+        self.bluePlanetCollision()
+
         self.asteroid1Y += self.randSpeed1
         self.asteroid2Y += self.randSpeed2
         self.asteroid3Y += self.randSpeed3
-        if (self.asteroid1Y >= (7*self.height/8)):
-          self.asteroid1Y = self.height/12
-          self.randSpeed1 = random.randint(5,30)
-          self.redPlanet = PhotoImage(file = "images/redplanethighlight.gif")
-        if (self.asteroid2Y >= (7*self.height/8)):
-          self.asteroid2Y = self.height/12
-          self.goldPlanet = PhotoImage(file = "images/goldplanethighlight.gif")
-          self.randSpeed2 = random.randint(5,30)
-        if (self.asteroid3Y >= (7*self.height/8)):
-          self.asteroid3Y = self.height/12
-          self.randSpeed3 = random.randint(5,30)
-          self.bluePlanet = PhotoImage(file = "images/blueplanethighlight.gif")
+
+        if (self.redOn):
+            self.redPlanet = PhotoImage(file = "images/redplanethighlight.gif")
+        elif (self.asteroid1Y >= (7*self.height/8)):
+            self.score -= 30
+            self.asteroid1Y = self.height/12
+            self.randSpeed1 = random.randint(5,30)
+            self.redPlanet = PhotoImage(file = "images/redplanet.gif")
+
+        if (self.goldOn):
+            self.goldPlanet = PhotoImage(file = "images/goldplanethighlight.gif")
+        elif (self.asteroid2Y >= (7*self.height/8)):
+            self.score -= 30
+            self.asteroid2Y = self.height/12
+            self.randSpeed2 = random.randint(5,30)
+            self.goldPlanet = PhotoImage(file = "images/goldplanet.gif")
+
+        if (self.blueOn):
+            self.bluePlanet = PhotoImage(file = "images/blueplanethighlight.gif")
+        elif (self.asteroid3Y >= (7*self.height/8)):
+            self.score -= 30
+            self.asteroid3Y = self.height/12
+            self.randSpeed3 = random.randint(5,30)
+            self.bluePlanet = PhotoImage(file = "images/blueplanet.gif")
+
+    def onKeyPressed(self, event):
+        self.ignoreNextTimerEvent = True
+        if (event.keysym == "Left"): 
+            if (self.redOn):
+                self.score += 50
+                self.asteroid1Y = self.height/12
+                self.randSpeed1 = random.randint(5,30)
+                self.redPlanet = PhotoImage(file = "images/redplanet.gif")
+            else:
+                self.score -= 20
+
+        if (event.keysym == "Up"):
+            if (self.goldOn):
+                self.score += 50
+                self.asteroid2Y = self.height/12
+                self.randSpeed2 = random.randint(5,30)
+                self.goldPlanet = PhotoImage(file = "images/goldplanet.gif")
+            else:
+                self.score -= 20
+
+        if (event.keysym == "Right"):
+            if (self.blueOn):
+                self.score += 50
+                self.asteroid3Y = self.height/12
+                self.randSpeed3 = random.randint(5,30)
+                self.bluePlanet = PhotoImage(file = "images/blueplanet.gif")
+            else:
+                self.score -= 20
 
     def drawAsteroids(self):
         self.asteroid = PhotoImage(file = "images/asteroid.gif")
@@ -112,27 +164,37 @@ class PiPiRevenge(EventBasedAnimationClass):
         cy = self.asteroid1Y
         cr = self.asteroidR
         if ((cx-x)**2+(cy-y)**2)**0.5 <= (cr + r):
-           self.canvas.create_text(self.width/2, self.height/2, "red planet")
+           # self.canvas.create_text(self.width/2, self.height/2, text="red planet")
+           self.redOn = True
+        else:
+            self.redOn = False
+
+    def goldPlanetCollision(self):
+        x = self.goldPlanetX
+        y = self.goldPlanetY
+        r = self.goldPlanetR
+        cx = self.asteroid2X
+        cy = self.asteroid2Y
+        cr = self.asteroidR
+        if ((cx-x)**2+(cy-y)**2)**0.5 <= (cr + r):
+            # self.canvas.create_text(self.width/2, self.height/2, text="gold planet")
+            self.goldOn = True
+        else:
+            self.goldOn = False
 
     def bluePlanetCollision(self):
         x = self.bluePlanetX
         y = self.bluePlanetY
         r = self.bluePlanetR
-        cx = self.asteroid2X
-        cy = self.asteroid2Y
-        cr = self.asteroidR
-        if ((cx-x)**2+(cy-y)**2)**0.5 <= (cr + r):
-            self.canvas.create_text(self.width/2, self.height/2, "blue planet")
-    
-    def goldPlanetCollision(self):
-        x = self.goldPlanetX
-        y = self.goldPlanetY
-        r = self.goldPlanetR
         cx = self.asteroid3X
         cy = self.asteroid3Y
         cr = self.asteroidR
         if ((cx-x)**2+(cy-y)**2)**0.5 <= (cr + r):
-            self.canvas.create_text(self.width/2, self.height/2, "gold planet")
+            # self.canvas.create_text(self.width/2, self.height/2, text="blue planet")
+            self.blueOn = True
+        else:
+            self.blueOn = False
+    
 
     def redrawAll(self):
         self.canvas.delete(ALL)
